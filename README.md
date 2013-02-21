@@ -1,0 +1,1 @@
+Guess version and convert quality scores in fastqfiles.

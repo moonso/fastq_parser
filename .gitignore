@@ -1,0 +1,9 @@
+.DS_Store
+*.pyc
+/data
+/res
+/doc
+/build
+/dist
+*.egg_info
+*.tmproj
