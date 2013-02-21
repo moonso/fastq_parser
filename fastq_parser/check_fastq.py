@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
 """
-untitled.py
+check_fastq.py
+
+Take a fastq file as input and checks if the quality string is in the PHRED+33 format or not.
+If --convert the qualities are converted to sanger(PHRED+33) format.
 
 Created by Måns Magnusson on 2013-02-21.
 Copyright (c) 2013 __MyCompanyName__. All rights reserved.
@@ -9,12 +12,13 @@ Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 
 import sys
 import os
+import argparse
 from Bio import SeqIO
 from fastq_sequence import fastq_record
 
 
 def guess_quality(infile):
-	"""Guess which quality meassure is beeing used."""
+	"""Guess which quality meassure is beeing used. Goes through the record of sequences until one with unquetionable information is found and then stops."""
 	i = 1
 	info = {}
 	for line in open(infile, 'r'):
@@ -39,10 +43,26 @@ def guess_quality(infile):
 		i += 1
 	return 'Not clear'
 
+def convert_quality_scores(infile, outfile = '', qualities='illumina'):
+	"""Converts the quality scores to sanger(PHRED+33)"""
+	if len(outfile) < 1:
+		outfile = infile+'.p33'
+	SeqIO.convert(infile, 'fastq-'+qualities, outfile, 'fastq')
+
 
 def main():
-	infile = sys.argv[1]
-	print guess_quality(infile)
+	parser = argparse.ArgumentParser(description="Give the path to a file to check what quality values are beeing used.")
+	parser.add_argument('infile', type=str, help="Specify the new infile")
+	parser.add_argument('-conv', '--convert', help="Convert the qualities to sanger format if necessary", action="store_true")
+	parser.add_argument('-out', '--outfile', help="Specify the outfile", default='')
+	args = parser.parse_args()
+	infile = args.infile
+	outfile = args.outfile
+	quality = guess_quality(infile)
+	print quality
+	if quality == 'illumina':
+		if args.convert:
+			convert_quality_scores(infile, outfile, quality)
 	# handle = open(infile,'rU')
 	# for seq_record in SeqIO.parse(infile, 'fastq'):
 	# 	print seq_record.id
