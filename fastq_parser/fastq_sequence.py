@@ -10,15 +10,15 @@ Copyright (c) 2013 __MyCompanyName__. All rights reserved.
 import sys
 import os
 
-class fastq_sequence(object):
+class fastq_record(object):
 	"""Holds the information of a fastqsequence"""
 	def __init__(self, id_string = '.', sequence = '.', info_string = '.', qualitystring = '.'):
-		super(fastq_sequence, self).__init__()
+		super(fastq_record, self).__init__()
 		self.id_string = id_string
 		self.sequence = sequence
 		self.info_string = info_string
 		self.qualitystring = qualitystring
-		self.format = '' # Options are 'solexa', 'illumina', 'sanger'
+		self.format = None # Options are 'solexa', 'illumina', 'sanger'
 	
 	def guess_quality(self):
 		"""Guess which quality meassure that is used for this fastq_file"""
@@ -29,7 +29,6 @@ class fastq_sequence(object):
 			elif ord(qual) > 80:# The scores rarely exceeds 40 (33+40=77) so with a score over 80 we can be pretty confident on illumina.
 				self.format = 'illumina'
 				break
-		print self.format
 	
 	def print_sequence(self):
 		"""Prints the sequence in fastq format"""
@@ -55,7 +54,7 @@ def main():
 			else:
 				info['id_string'] = line
 		else:
-			my_sequences.append(fastq_sequence(**info))
+			my_sequences.append(fastq_record(**info))
 			i = 1
 			info = {}
 			info['id_string'] = line
