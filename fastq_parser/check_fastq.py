@@ -52,14 +52,22 @@ def convert_quality_scores(infile, outfile = '', qualities='illumina'):
 
 def main():
 	parser = argparse.ArgumentParser(description="Give the path to a file to check what quality values are beeing used.")
-	parser.add_argument('infile', type=str, help="Specify the new infile")
+	parser.add_argument('infile', type=str, help="Specify the new infile.")
 	parser.add_argument('-conv', '--convert', help="Convert the qualities to sanger format if necessary", action="store_true")
 	parser.add_argument('-out', '--outfile', help="Specify the outfile", default='')
 	args = parser.parse_args()
 	infile = args.infile
 	outfile = args.outfile
+	if os.path.exists(infile):
+		if os.path.isfile(infile):
+			pass
+		else:
+			print infile, ' is not a file!'
+			sys.exit()
+	else:
+		print infile, ' does not exist!'
+		sys.exit()
 	quality = guess_quality(infile)
-	print quality
 	if quality == 'illumina':
 		if args.convert:
 			convert_quality_scores(infile, outfile, quality)
