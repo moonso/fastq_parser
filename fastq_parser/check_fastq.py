@@ -51,7 +51,9 @@ def convert_quality_scores(infile, outfile = '', qualities='illumina'):
 
 
 def main():
-	parser = argparse.ArgumentParser(description="Give the path to a file to check what quality values are beeing used.")
+	parser = argparse.ArgumentParser(description="""Give the path to a file to check what quality values are beeing used.
+	If argument --convert then the quality values are converted to sanger format, if necessary.
+	If no outfile is specified the new file will have the same name as the infile but with the ending .p33""")
 	parser.add_argument('infile', type=str, help="Specify the new infile.")
 	parser.add_argument('-conv', '--convert', help="Convert the qualities to sanger format if necessary", action="store_true")
 	parser.add_argument('-out', '--outfile', help="Specify the outfile", default='')
