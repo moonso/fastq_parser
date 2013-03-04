@@ -70,14 +70,11 @@ def main():
 		print infile, ' does not exist!'
 		sys.exit()
 	quality = guess_quality(infile)
-	if quality == 'illumina':
-		if args.convert:
+	if args.convert:
+		if quality == 'illumina':
 			convert_quality_scores(infile, outfile, quality)
-	# handle = open(infile,'rU')
-	# for seq_record in SeqIO.parse(infile, 'fastq'):
-	# 	print seq_record.id
-	# 	print len(seq_record)
-	# 	print seq_record
+	else:
+		print quality
 
 
 if __name__ == '__main__':
